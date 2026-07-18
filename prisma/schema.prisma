@@ -8,34 +8,34 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  fullName  String
-  email     String   @unique
-  password  String
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  resumes   Resume[]
+  id         String             @id @default(cuid())
+  fullName   String
+  email      String             @unique
+  password   String
+  createdAt  DateTime           @default(now())
+  updatedAt  DateTime           @updatedAt
   interviews InterviewSession[]
+  resumes    Resume[]
 }
 
 model Resume {
-  id        String   @id @default(cuid())
-  fileUrl   String
-
-  createdAt DateTime @default(now())
-
-  userId    String
-  user      User @relation(fields: [userId], references: [id])
+  id         String             @id @default(cuid())
+  fileUrl    String
+  createdAt  DateTime           @default(now())
+  userId     String
+  interviews InterviewSession[]
+  user       User               @relation(fields: [userId], references: [id])
 }
 
 model InterviewSession {
   id        String   @id @default(cuid())
-  score     Int?
-
+  score     Float?
   createdAt DateTime @default(now())
-
   userId    String
-  user      User @relation(fields: [userId], references: [id])
+  answers   Json?
+  feedback  String?
+  questions Json
+  resumeId  String
+  resume    Resume   @relation(fields: [resumeId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
 }
